@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Battery Management System</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<style>
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			padding: 5px;
+		}
+	</style>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function getValue() {
+                fetch('/get_value')
+        .then(response => response.json())
+        .then(data => {
+            $('#battery_status').text(data.BatteryStatus);
+	    $('#current_capacity').text(data.CurrentCapacity + " Ah");
+	    $('#rated_capacity').text(data.RatedCapacity + " Ah");
+	    $('#soc').text(data.SOC + " %");
+	    $('#soh').text(data.SOH + " %");
+	    $('#distance_to_reach').text(data.DistanceToReach + " KM");
+	    if(data.IsCurrentSensorDefect == true){
+		$('#current_sensor_defect').text(" Error: Current sensor defect");
+		$('#current_sensor_defect').addClass("p-3 mb-2 bg-danger text-white");
+	    }else {
+		$('#current_sensor_defect').text(" Current sensor is working fine ");
+		$('#current_sensor_defect').addClass("p-3 mb-2 bg-success text-white");
+	    }
+	    if(data.IsVoltageSensorDefect == true){
+                $('#voltage_sensor_defect').text(" Error: Voltage sensor defect");
+                $('#voltage_sensor_defect').addClass("p-3 mb-2 bg-danger text-white");
+            }else {
+                $('#voltage_sensor_defect').text(" Voltage sensor is working fine");
+                $('#voltage_sensor_defect').addClass("p-3 mb-2 bg-success text-white");
+            }
+	    if(data.IsHeatSysDefect == true){
+                $('#heat_sys_defect').text(" Error: Heating system defect");
+                $('#heat_sys_defect').addClass("p-3 mb-2 bg-danger text-white");
+            }else {
+                $('#heat_sys_defect').text(" Heating system is working fine ");
+                $('#heat_sys_defect').addClass("p-3 mb-2 bg-success text-white");
+            }
+	    if(data.IsCoolSysDefect == true){
+                $('#cool_sys_defect').text(" Error: Cooling system defect");
+                $('#cool_sys_defect').addClass("p-3 mb-2 bg-danger text-white");
+            }else {
+                $('#cool_sys_defect').text(" Cooling system is working fine ");
+                $('#cool_sys_defect').addClass("p-3 mb-2 bg-success text-white");
+            }
+	    if(data.IsCellDefect == true){
+                $('#cell_defect').text(" Error: Battery cell defect");
+                $('#cell_defect').addClass("p-3 mb-2 bg-danger text-white");
+            }else {
+                $('#cell_defect').text(" Battery cell is working fine ");
+                $('#cell_defect').addClass("p-3 mb-2 bg-success text-white");
+            }
+		console.log(data)
+            });
+        }
+        setInterval(getValue, 1000);
+    </script>	
+</head>
+<body>
+
+	<div class="container">
+<h1>Battery Management System</h1>		
+
+
+		<div class="row">
+			<!--<div class="col-lg-3">-->
+                        <div class="col-12 col-md-6 col-lg-4">	
+				<table class="table table-striped table-dark">
+					<thead>
+						<tr>
+							<th>Notification panel</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr   >
+							<td id="current_sensor_defect"> </td>
+
+							
+						</tr>
+						<tr>
+							<td id="voltage_sensor_defect"></td>
+
+						</tr>
+						<tr>
+							<td id="heat_sys_defect"></td>
+
+						</tr>
+						<tr>
+                                                        <td id="cool_sys_defect"></td>
+
+                                                </tr>
+						<tr>
+                                                        <td id="cell_defect"></td>
+
+                                                </tr>
+					</tbody>
+				</table>
+			</div>
+			<!--<div class="col-lg-5">-->
+                       <div class="col-12 col-md-6 col-lg-4">
+			<table class="table">
+				<thead>
+						<tr>
+							<th>Speed : 80 km/h</th>
+					</tr>
+					</thead>
+				</table>
+				
+			<div class="text-center">
+  <img src="https://webneel.com/wallpaper/sites/default/files/images/07-2013/5%20koenigsegg%20car%20hd%20wallpaper.preview.jpg" class="img-fluid" alt="...">
+</div>
+			</div>
+			<!--<div class="col-lg-3">-->
+                        <div class="col-12 col-md-6 col-lg-4">
+				<table class="table table-striped table-dark">
+
+					<tbody>
+						<tr>
+						  <td>Battery status</td>
+							<td id="battery_status"> battery_status</td>
+								
+						</tr>
+						<tr>
+							<td>Battery current capacity</td>
+						
+							<td id="current_capacity"> </td>
+						</tr>
+						<tr>
+							<td>Battery rated capacity</td>
+							<td id="rated_capacity"></td>
+						</tr>
+						<tr>
+							<td>State of charge</td>
+							<td id="soc"></td>
+						</tr>
+						<tr>
+							<td>State of health</td>
+							<td id="soh"></td>
+						</tr>
+						<tr>
+							<td>Distance to reach</td>
+							<td id="distance_to_reach"></td>
+						</tr>
+
+						<tr>
+                                                        <td>Battery residual lifetime</td>
+                                                        <td>13.5 years</td>
+                                                </tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="chart">{{ chart|safe }}</div>
+	</div>
+
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+
